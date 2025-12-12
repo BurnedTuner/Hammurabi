@@ -28,6 +28,7 @@
     <ClInclude Include="Headers\Constants.h" />
     <ClInclude Include="Headers\Game.h" />
     <ClInclude Include="Headers\Input.h" />
+    <ClInclude Include="Headers\RandomModule.h" />
     <ClInclude Include="Headers\Round.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

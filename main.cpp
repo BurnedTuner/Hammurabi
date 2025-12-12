@@ -5,6 +5,7 @@
 #include "Headers/Game.h"
 #include "Headers/Round.h"
 #include "Headers/Constants.h"
+#include "Headers/RandomModule.h"
 using namespace std;
 
 int main()
@@ -12,6 +13,7 @@ int main()
     SetConsoleCP(65001);
     SetConsoleOutputCP(65001);
     struct GameData game;
+    struct RandomModule rm;
     struct RoundData round;
 
     checkSave(game);
@@ -20,7 +22,7 @@ int main()
     {
         cout << "Мой повелитель, соизволь поведать тебе.\nВ году " << game.round << " твоего высочайшего правления..." << endl;
 
-        round.price = 1; //replace with random later
+        round.price = rm.priceDist(rm.rng);
 
         if (game.round > 1)
         {
@@ -44,13 +46,13 @@ int main()
                 game.population += round.came;
             }
 
-            round.plague = true; //replace with random later
+            round.plague = rm.plagueDist(rm.rng) <= PLAGUE_ODD;
             if (round.plague)
             {
                 game.population /= 2;
             }
 
-            round.ratFood = ((float)1 / 100.0f) * game.balance; //replace with random later
+            round.ratFood = ((float)rm.ratDist(rm.rng) / 100.0f) * game.balance;
             game.balance -= round.ratFood;
         }
 
@@ -72,7 +74,7 @@ int main()
         game.desiredFood = foodInput(game);
         game.balance -= game.desiredFood;
         
-        round.harvest = 1; //replace with random later
+        round.harvest = rm.harvestDist(rm.rng);
         int seedInputResult = seedInput(game);
         game.desiredHarvest = seedInputResult * round.harvest;
         game.balance += game.desiredHarvest - (seedInputResult * SEED_PRICE);
