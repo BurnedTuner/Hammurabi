@@ -14,6 +14,7 @@ int main()
     struct GameData game;
     struct RoundData round;
 
+    checkSave(game);
 
     while (game.round <= GAME_LENGTH)
     {
@@ -75,6 +76,12 @@ int main()
         int seedInputResult = seedInput(game);
         game.desiredHarvest = seedInputResult * round.harvest;
         game.balance += game.desiredHarvest - (seedInputResult * SEED_PRICE);
+
+        if (promptSave(game))
+        {
+            std::system("pause");
+            return 0;
+        }
         game.round++;
     }
     gameResults(game);

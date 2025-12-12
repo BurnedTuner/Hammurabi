@@ -17,6 +17,46 @@ char validateInput(const std::string &text, std::function<bool (int)> validator)
     }
 }
 
+void GameData::saveData()
+{
+    std::ofstream file("savedata.txt");
+    file.write(reinterpret_cast<char*>(this), sizeof(GameData));
+    file.close();
+}
+
+void GameData::loadData()
+{
+    std::ifstream file("savedata.txt");
+    if(!file)
+    {
+        return;
+    }
+    file.read(reinterpret_cast<char*>(this), sizeof(GameData));
+    file.close();
+}
+
+void checkSave(GameData& game)
+{
+    std::ifstream saveFile("savedata.txt");
+    if(saveFile)
+    {
+        if (validateInput("Желаете загрузить сохранённую игру? (y/n) ", [](int v){ return v == 'y' or v == 'n';}) == 'y')
+        {
+            game.loadData();
+        }
+    }
+}
+
+bool promptSave(GameData& game)
+{
+    if (validateInput("Желаете продолжить правление? (y/n) ", [](int v){ return v == 'y' or v == 'n';}) == 'n')
+    {
+        game.saveData();
+        return true;
+    }
+    return false;
+}
+
 void roundResults(GameData& game, RoundData& round)
 {
     using namespace std;
